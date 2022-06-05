@@ -41,6 +41,7 @@
         <module>sort-core</module>
         <module>sort-dist</module>
         <module>sort-end-to-end-tests</module>
+        <module>sort-metric</module>
     </modules>
     <properties>
         <debezium.version>1.5.4.Final</debezium.version>

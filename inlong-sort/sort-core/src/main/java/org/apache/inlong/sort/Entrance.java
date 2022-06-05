@@ -43,6 +43,7 @@ public class Entrance {
         final ParameterTool parameterTool = ParameterTool.fromArgs(args);
         final Configuration config = parameterTool.getConfiguration();
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        env.disableOperatorChaining();
         // Checkpoint related
         env.enableCheckpointing(config.getInteger(Constants.CHECKPOINT_INTERVAL_MS));
         env.getCheckpointConfig().setMinPauseBetweenCheckpoints(
