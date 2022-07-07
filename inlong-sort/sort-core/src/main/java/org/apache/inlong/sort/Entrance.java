@@ -42,7 +42,20 @@ public class Entrance {
     public static void main(String[] args) throws Exception {
         final ParameterTool parameterTool = ParameterTool.fromArgs(args);
         final Configuration config = parameterTool.getConfiguration();
-        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
+        /**
+         * metrics.reporters: sort
+         * metrics.reporter.sort.factory.class: org.apache.inlong.sort.metric.SortReporterFactory
+         * metrics.reporter.sort.host: localhost
+         * metrics.reporter.sort.port: 8083
+         * metrics.reporter.sort.interval: 60 SECONDS
+         */
+        org.apache.flink.configuration.Configuration configuration = new org.apache.flink.configuration.Configuration();
+        configuration.setString("metrics.reporters", "sort");
+        configuration.setString("metrics.reporter.sort.factory.class", "org.apache.inlong.sort.metric.SortReporterFactory");
+        configuration.setString("metrics.reporter.sort.host", "localhost");
+        configuration.setString("metrics.reporter.sort.port", "8083");
+        configuration.setString("metrics.reporter.sort.interval", "60 SECONDS");
+        final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment(configuration);
         env.disableOperatorChaining();
         // Checkpoint related
         env.enableCheckpointing(config.getInteger(Constants.CHECKPOINT_INTERVAL_MS));
@@ -64,7 +77,7 @@ public class Entrance {
         }
         final ParseResult parseResult = Preconditions.checkNotNull(parser.parse(),
                 "parse result is null");
-        parseResult.execute();
+        parseResult.waitExecute();
     }
 
     private static String getStatementSetFromFile(String fileName) throws IOException {

@@ -109,20 +109,27 @@ public class SortReporter extends AbstractReporter implements Scheduled {
      */
     @Override
     public void report() {
-        for (Map.Entry<Gauge<?>, String> entry : gauges.entrySet()) {
-            log.info("metric" + entry.getValue() + ":" + entry.getKey().getValue());
-        }
+        /* for (Map.Entry<Gauge<?>, String> entry : gauges.entrySet()) {
+            log.info(entry.getValue() + " =(Gauge) " + entry.getKey().getValue());
+        }*/
 
         for (Map.Entry<Counter, String> entry : counters.entrySet()) {
-            log.info("metric" + entry.getValue() + ":" + entry.getKey().getCount());
+            if (entry.getValue().contains("numRecordsOut") || entry.getValue().contains("numRecordsIn")
+                    || entry.getValue().contains("numBytesOut") || entry.getValue().contains("gongxin")) {
+                log.info(entry.getValue() + " =(Counter) " + entry.getKey().getCount());
+            }
         }
 
-        for (Map.Entry<Histogram, String> entry : histograms.entrySet()) {
-            log.info("metric" + entry.getValue() + ":" + entry.getKey().getCount());
-        }
+        /*for (Map.Entry<Histogram, String> entry : histograms.entrySet()) {
+            log.info(entry.getValue() + " =(Histogram) " + entry.getKey().getCount());
+        }*/
 
         for (Map.Entry<Meter, String> entry : meters.entrySet()) {
-            log.info("metric" + entry.getValue() + ":" + entry.getKey().getCount());
+            if (entry.getValue().contains("numRecordsOutPerSecond") || entry.getValue().contains(
+                    "numRecordsIntPerSecond") || entry.getValue().contains("numBytesOutPerSecond")
+                    || entry.getValue().contains("gongxin")) {
+                log.info(entry.getValue() + " =(Meter) " + entry.getKey().getCount());
+            }
         }
     }
 }

@@ -30,6 +30,12 @@ import java.time.Duration;
  */
 public class MySqlSourceOptions {
 
+    public static final ConfigOption<String> INLONG_STREAM_ID_NODE_ID =
+            ConfigOptions.key("inlong.streamId.nodeId")
+                    .stringType()
+                    .defaultValue("")
+                    .withDescription("INLONG STREAM ID + '_' + NODE ID");
+
     public static final ConfigOption<String> HOSTNAME =
             ConfigOptions.key("hostname")
                     .stringType()

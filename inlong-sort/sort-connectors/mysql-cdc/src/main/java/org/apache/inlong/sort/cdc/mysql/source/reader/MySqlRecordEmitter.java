@@ -25,6 +25,7 @@ import io.debezium.relational.TableId;
 import io.debezium.relational.history.HistoryRecord;
 import io.debezium.relational.history.TableChanges;
 import io.debezium.relational.history.TableChanges.TableChange;
+import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
 import org.apache.flink.api.connector.source.SourceOutput;
 import org.apache.flink.connector.base.source.reader.RecordEmitter;
 import org.apache.flink.util.Collector;
@@ -144,6 +145,8 @@ public final class MySqlRecordEmitter<T>
                     new Collector<T>() {
                         @Override
                         public void collect(final T t) {
+                            sourceReaderMetrics.getNumRecordsIn().inc(1L);
+                            sourceReaderMetrics.getNumBytesIn().inc(ObjectSizeCalculator.getObjectSize(t));
                             output.collect(t);
                         }
 

@@ -131,21 +131,27 @@ public class MySqlSource<T>
     @Override
     public SourceReader<T, MySqlSplit> createReader(SourceReaderContext readerContext)
             throws Exception {
-        // create source config for the given subtask (e.g. unique server id)
-        MySqlSourceConfig sourceConfig =
-                configFactory.createConfig(readerContext.getIndexOfSubtask());
-        FutureCompletingBlockingQueue<RecordsWithSplitIds<SourceRecord>> elementsQueue =
-                new FutureCompletingBlockingQueue<>();
-
         final Method metricGroupMethod = readerContext.getClass().getMethod("metricGroup");
         metricGroupMethod.setAccessible(true);
         final MetricGroup metricGroup = (MetricGroup) metricGroupMethod.invoke(readerContext);
-
         final MySqlSourceReaderMetrics sourceReaderMetrics =
                 new MySqlSourceReaderMetrics(metricGroup);
         sourceReaderMetrics.registerMetrics();
         MySqlSourceReaderContext mySqlSourceReaderContext =
                 new MySqlSourceReaderContext(readerContext);
+        // create source config for the given subtask (e.g. unique server id)
+        MySqlSourceConfig sourceConfig =
+                configFactory.createConfig(readerContext.getIndexOfSubtask());
+        sourceReaderMetrics.registerMetricsForNumBytesIn(sourceConfig.getInlongStreamIdAndNodeId()
+                + "_numBytes");
+        sourceReaderMetrics.registerMetricsForNumRecordsIn(sourceConfig.getInlongStreamIdAndNodeId()
+                + "_numRecordsIn");
+        sourceReaderMetrics.registerMetricsForNumBytesInPerSecond(sourceConfig.getInlongStreamIdAndNodeId()
+                + "_numBytesInPerSecond");
+        sourceReaderMetrics.registerMetricsForNumRecordsInPerSecond(sourceConfig.getInlongStreamIdAndNodeId()
+                + "_numRecordsInPerSecond");
+        FutureCompletingBlockingQueue<RecordsWithSplitIds<SourceRecord>> elementsQueue =
+                new FutureCompletingBlockingQueue<>();
         Supplier<MySqlSplitReader> splitReaderSupplier =
                 () ->
                         new MySqlSplitReader(

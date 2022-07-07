@@ -252,6 +252,11 @@ public class MySqlSourceBuilder<T> {
         return this;
     }
 
+    public MySqlSourceBuilder<T> inlongStreamIdAndNodeId(String inlongStreamIdAndNodeId) {
+        this.configFactory.inlongStreamIdAndNodeId(inlongStreamIdAndNodeId);
+        return this;
+    }
+
     /**
      * Build the {@link MySqlSource}.
      *
