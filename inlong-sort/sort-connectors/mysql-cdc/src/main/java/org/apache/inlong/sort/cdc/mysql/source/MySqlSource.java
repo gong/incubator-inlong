@@ -143,13 +143,13 @@ public class MySqlSource<T>
         MySqlSourceConfig sourceConfig =
                 configFactory.createConfig(readerContext.getIndexOfSubtask());
         sourceReaderMetrics.registerMetricsForNumBytesIn(sourceConfig.getInlongStreamIdAndNodeId()
-                + "_numBytes");
+                + "numBytes");
         sourceReaderMetrics.registerMetricsForNumRecordsIn(sourceConfig.getInlongStreamIdAndNodeId()
-                + "_numRecordsIn");
+                + "numRecordsIn");
         sourceReaderMetrics.registerMetricsForNumBytesInPerSecond(sourceConfig.getInlongStreamIdAndNodeId()
-                + "_numBytesInPerSecond");
+                + "numBytesInPerSecond");
         sourceReaderMetrics.registerMetricsForNumRecordsInPerSecond(sourceConfig.getInlongStreamIdAndNodeId()
-                + "_numRecordsInPerSecond");
+                + "numRecordsInPerSecond");
         FutureCompletingBlockingQueue<RecordsWithSplitIds<SourceRecord>> elementsQueue =
                 new FutureCompletingBlockingQueue<>();
         Supplier<MySqlSplitReader> splitReaderSupplier =

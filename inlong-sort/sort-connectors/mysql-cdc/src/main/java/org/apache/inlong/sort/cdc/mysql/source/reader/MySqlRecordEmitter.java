@@ -25,7 +25,6 @@ import io.debezium.relational.TableId;
 import io.debezium.relational.history.HistoryRecord;
 import io.debezium.relational.history.TableChanges;
 import io.debezium.relational.history.TableChanges.TableChange;
-import jdk.nashorn.internal.ir.debug.ObjectSizeCalculator;
 import org.apache.flink.api.connector.source.SourceOutput;
 import org.apache.flink.connector.base.source.reader.RecordEmitter;
 import org.apache.flink.util.Collector;
@@ -40,6 +39,7 @@ import org.apache.kafka.connect.source.SourceRecord;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
 import static org.apache.inlong.sort.cdc.mysql.source.utils.RecordUtils.getBinlogPosition;
@@ -146,7 +146,8 @@ public final class MySqlRecordEmitter<T>
                         @Override
                         public void collect(final T t) {
                             sourceReaderMetrics.getNumRecordsIn().inc(1L);
-                            sourceReaderMetrics.getNumBytesIn().inc(ObjectSizeCalculator.getObjectSize(t));
+                            sourceReaderMetrics.getNumBytesIn()
+                                    .inc(t.toString().getBytes(StandardCharsets.UTF_8).length);
                             output.collect(t);
                         }
 
@@ -172,7 +173,7 @@ public final class MySqlRecordEmitter<T>
     }
 
     private void emitElement(SourceRecord element, SourceOutput<T> output,
-                             TableChange tableSchema) throws Exception {
+            TableChange tableSchema) throws Exception {
         outputCollector.output = output;
         debeziumDeserializationSchema.deserialize(element, outputCollector, tableSchema);
     }

@@ -128,7 +128,7 @@ public class SortReporter extends AbstractReporter implements Scheduled {
             if (entry.getValue().contains("numRecordsOutPerSecond") || entry.getValue().contains(
                     "numRecordsIntPerSecond") || entry.getValue().contains("numBytesOutPerSecond")
                     || entry.getValue().contains("gongxin")) {
-                log.info(entry.getValue() + " =(Meter) " + entry.getKey().getCount());
+                log.info(entry.getValue() + " =(Meter) " + entry.getKey().getRate());
             }
         }
     }

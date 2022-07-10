@@ -55,9 +55,11 @@ public class MySqlSourceReaderMetrics {
     private Counter numBytesIn;
     private Meter numRecordsInPerSecond;
     private Meter numBytesInPerSecond;
+    private MetricGroup inlongSource;
 
     public MySqlSourceReaderMetrics(MetricGroup metricGroup) {
         this.metricGroup = metricGroup;
+        this.inlongSource = metricGroup.addGroup("inlongSource");
     }
 
     public void registerMetrics() {
@@ -67,19 +69,19 @@ public class MySqlSourceReaderMetrics {
     }
 
     public void registerMetricsForNumRecordsIn(String metricName) {
-        numRecordsIn = metricGroup.counter(metricName);
+        numRecordsIn = inlongSource.counter(metricName);
     }
 
     public void registerMetricsForNumBytesIn(String metricName) {
-        numBytesIn = metricGroup.counter(metricName);
+        numBytesIn = inlongSource.counter(metricName);
     }
 
     public void registerMetricsForNumRecordsInPerSecond(String metricName) {
-        numRecordsInPerSecond = metricGroup.meter(metricName, new MeterView(this.numRecordsIn, 60));
+        numRecordsInPerSecond = inlongSource.meter(metricName, new MeterView(this.numRecordsIn, 60));
     }
 
     public void registerMetricsForNumBytesInPerSecond(String metricName) {
-        numBytesInPerSecond = metricGroup.meter(metricName, new MeterView(this.numBytesIn, 60));
+        numBytesInPerSecond = inlongSource.meter(metricName, new MeterView(this.numBytesIn, 60));
     }
 
     public long getFetchDelay() {
