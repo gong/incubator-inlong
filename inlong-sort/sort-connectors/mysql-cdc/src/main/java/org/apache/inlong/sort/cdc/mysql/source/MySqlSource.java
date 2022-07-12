@@ -142,14 +142,12 @@ public class MySqlSource<T>
         // create source config for the given subtask (e.g. unique server id)
         MySqlSourceConfig sourceConfig =
                 configFactory.createConfig(readerContext.getIndexOfSubtask());
-        sourceReaderMetrics.registerMetricsForNumBytesIn(sourceConfig.getInlongStreamIdAndNodeId()
-                + "numBytes");
-        sourceReaderMetrics.registerMetricsForNumRecordsIn(sourceConfig.getInlongStreamIdAndNodeId()
-                + "numRecordsIn");
-        sourceReaderMetrics.registerMetricsForNumBytesInPerSecond(sourceConfig.getInlongStreamIdAndNodeId()
-                + "numBytesInPerSecond");
-        sourceReaderMetrics.registerMetricsForNumRecordsInPerSecond(sourceConfig.getInlongStreamIdAndNodeId()
-                + "numRecordsInPerSecond");
+        String streamId = sourceConfig.getInlongStreamIdAndNodeId().split("_")[0];
+        String nodeId = sourceConfig.getInlongStreamIdAndNodeId().split("_")[1];
+        sourceReaderMetrics.registerMetricsForNumBytesIn(streamId, nodeId, "numBytesIn");
+        sourceReaderMetrics.registerMetricsForNumRecordsIn(streamId, nodeId, "numRecordsIn");
+        sourceReaderMetrics.registerMetricsForNumBytesInPerSecond(streamId, nodeId, "numBytesInPerSecond");
+        sourceReaderMetrics.registerMetricsForNumRecordsInPerSecond(streamId, nodeId, "numRecordsInPerSecond");
         FutureCompletingBlockingQueue<RecordsWithSplitIds<SourceRecord>> elementsQueue =
                 new FutureCompletingBlockingQueue<>();
         Supplier<MySqlSplitReader> splitReaderSupplier =
