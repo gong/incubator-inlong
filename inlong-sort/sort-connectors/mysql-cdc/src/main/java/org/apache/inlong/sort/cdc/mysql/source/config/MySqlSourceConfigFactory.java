@@ -74,10 +74,10 @@ public class MySqlSourceConfigFactory implements Serializable {
     private Duration heartbeatInterval = HEARTBEAT_INTERVAL.defaultValue();
     private Properties dbzProperties;
 
-    private String inlongStreamIdAndNodeId;
+    private String inlongGroupStreamNodeId;
 
-    public MySqlSourceConfigFactory inlongStreamIdAndNodeId(String inlongStreamIdAndNodeId) {
-        this.inlongStreamIdAndNodeId = inlongStreamIdAndNodeId;
+    public MySqlSourceConfigFactory inlongGroupStreamNodeId(String inlongGroupStreamNodeId) {
+        this.inlongGroupStreamNodeId = inlongGroupStreamNodeId;
         return this;
     }
 
@@ -341,8 +341,8 @@ public class MySqlSourceConfigFactory implements Serializable {
             jdbcProperties = new Properties();
         }
 
-        if (inlongStreamIdAndNodeId == null) {
-            inlongStreamIdAndNodeId = "";
+        if (inlongGroupStreamNodeId == null) {
+            inlongGroupStreamNodeId = "";
         }
 
         return new MySqlSourceConfig(
@@ -367,6 +367,6 @@ public class MySqlSourceConfigFactory implements Serializable {
                 scanNewlyAddedTableEnabled,
                 props,
                 jdbcProperties,
-                inlongStreamIdAndNodeId);
+                inlongGroupStreamNodeId);
     }
 }

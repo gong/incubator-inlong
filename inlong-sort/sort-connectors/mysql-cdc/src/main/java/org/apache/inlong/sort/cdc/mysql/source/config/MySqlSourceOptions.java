@@ -30,11 +30,11 @@ import java.time.Duration;
  */
 public class MySqlSourceOptions {
 
-    public static final ConfigOption<String> INLONG_STREAM_ID_NODE_ID =
-            ConfigOptions.key("inlong.streamId.nodeId")
+    public static final ConfigOption<String> INLONG_GROUP_STREAM_NODE_ID =
+            ConfigOptions.key("inlong.group.stream.nodeId")
                     .stringType()
                     .defaultValue("")
-                    .withDescription("INLONG STREAM ID + '_' + NODE ID");
+                    .withDescription("INLONG GROUP ID + '_' + STREAM ID + '_' + NODE ID");
 
     public static final ConfigOption<String> HOSTNAME =
             ConfigOptions.key("hostname")

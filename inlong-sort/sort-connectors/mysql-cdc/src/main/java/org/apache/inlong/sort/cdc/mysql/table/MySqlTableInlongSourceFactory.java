@@ -46,7 +46,7 @@ import static org.apache.inlong.sort.cdc.mysql.source.config.MySqlSourceOptions.
 import static org.apache.inlong.sort.cdc.mysql.source.config.MySqlSourceOptions.DATABASE_NAME;
 import static org.apache.inlong.sort.cdc.mysql.source.config.MySqlSourceOptions.HEARTBEAT_INTERVAL;
 import static org.apache.inlong.sort.cdc.mysql.source.config.MySqlSourceOptions.HOSTNAME;
-import static org.apache.inlong.sort.cdc.mysql.source.config.MySqlSourceOptions.INLONG_STREAM_ID_NODE_ID;
+import static org.apache.inlong.sort.cdc.mysql.source.config.MySqlSourceOptions.INLONG_GROUP_STREAM_NODE_ID;
 import static org.apache.inlong.sort.cdc.mysql.source.config.MySqlSourceOptions.MIGRATE_ALL;
 import static org.apache.inlong.sort.cdc.mysql.source.config.MySqlSourceOptions.PASSWORD;
 import static org.apache.inlong.sort.cdc.mysql.source.config.MySqlSourceOptions.PORT;
@@ -120,7 +120,7 @@ public class MySqlTableInlongSourceFactory implements DynamicTableSourceFactory 
                 DebeziumOptions.DEBEZIUM_OPTIONS_PREFIX, JdbcUrlUtils.PROPERTIES_PREFIX);
 
         final ReadableConfig config = helper.getOptions();
-        final String inlongStreamIdAndNodeId = config.get(INLONG_STREAM_ID_NODE_ID);
+        final String inlongGroupStreamNodeId = config.get(INLONG_GROUP_STREAM_NODE_ID);
         final String hostname = config.get(HOSTNAME);
         final String username = config.get(USERNAME);
         final String password = config.get(PASSWORD);
@@ -186,7 +186,7 @@ public class MySqlTableInlongSourceFactory implements DynamicTableSourceFactory 
                 JdbcUrlUtils.getJdbcProperties(context.getCatalogTable().getOptions()),
                 heartbeatInterval,
                 migrateAll,
-                inlongStreamIdAndNodeId);
+                inlongGroupStreamNodeId);
     }
 
     @Override
@@ -228,7 +228,7 @@ public class MySqlTableInlongSourceFactory implements DynamicTableSourceFactory 
         options.add(MIGRATE_ALL);
         options.add(SCAN_NEWLY_ADDED_TABLE_ENABLED);
         options.add(HEARTBEAT_INTERVAL);
-        options.add(INLONG_STREAM_ID_NODE_ID);
+        options.add(INLONG_GROUP_STREAM_NODE_ID);
         return options;
     }
 

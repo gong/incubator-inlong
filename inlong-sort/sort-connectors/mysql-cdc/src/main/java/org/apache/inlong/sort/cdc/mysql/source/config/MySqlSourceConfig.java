@@ -67,7 +67,7 @@ public class MySqlSourceConfig implements Serializable {
     private final Configuration dbzConfiguration;
     private final MySqlConnectorConfig dbzMySqlConfig;
 
-    private final String inlongStreamIdAndNodeId;
+    private final String inlongGroupStreamNodeId;
 
     MySqlSourceConfig(
             String hostname,
@@ -91,7 +91,7 @@ public class MySqlSourceConfig implements Serializable {
             boolean scanNewlyAddedTableEnabled,
             Properties dbzProperties,
             Properties jdbcProperties,
-            String inlongStreamIdAndNodeId) {
+            String inlongGroupStreamNodeId) {
         this.hostname = checkNotNull(hostname);
         this.port = port;
         this.username = checkNotNull(username);
@@ -115,7 +115,7 @@ public class MySqlSourceConfig implements Serializable {
         this.dbzConfiguration = Configuration.from(dbzProperties);
         this.dbzMySqlConfig = new MySqlConnectorConfig(dbzConfiguration);
         this.jdbcProperties = jdbcProperties;
-        this.inlongStreamIdAndNodeId = inlongStreamIdAndNodeId;
+        this.inlongGroupStreamNodeId = inlongGroupStreamNodeId;
     }
 
     public String getHostname() {
@@ -215,7 +215,7 @@ public class MySqlSourceConfig implements Serializable {
         return jdbcProperties;
     }
 
-    public String getInlongStreamIdAndNodeId() {
-        return inlongStreamIdAndNodeId;
+    public String getInlongGroupStreamNodeId() {
+        return inlongGroupStreamNodeId;
     }
 }

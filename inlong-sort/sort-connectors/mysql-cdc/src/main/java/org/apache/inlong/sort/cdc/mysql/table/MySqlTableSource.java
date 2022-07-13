@@ -81,7 +81,7 @@ public class MySqlTableSource implements ScanTableSource, SupportsReadingMetadat
     private final Properties jdbcProperties;
     private final Duration heartbeatInterval;
     private final boolean migrateAll;
-    private final String inlongStreamIdAndNodeId;
+    private final String inlongGroupStreamNodeId;
     // --------------------------------------------------------------------------------------------
     // Mutable attributes
     // --------------------------------------------------------------------------------------------
@@ -123,7 +123,7 @@ public class MySqlTableSource implements ScanTableSource, SupportsReadingMetadat
             StartupOptions startupOptions,
             Duration heartbeatInterval,
             boolean migrateAll,
-            String inlongStreamIdAndNodeId) {
+            String inlongGroupStreamIdAndNodeId) {
         this(
                 physicalSchema,
                 port,
@@ -150,7 +150,7 @@ public class MySqlTableSource implements ScanTableSource, SupportsReadingMetadat
                 new Properties(),
                 heartbeatInterval,
                 migrateAll,
-                inlongStreamIdAndNodeId);
+                inlongGroupStreamIdAndNodeId);
     }
 
     /**
@@ -182,7 +182,7 @@ public class MySqlTableSource implements ScanTableSource, SupportsReadingMetadat
             Properties jdbcProperties,
             Duration heartbeatInterval,
             boolean migrateAll,
-            String inlongStreamIdAndNodeId) {
+            String inlongGroupStreamIdAndNodeId) {
         this.physicalSchema = physicalSchema;
         this.port = port;
         this.hostname = checkNotNull(hostname);
@@ -211,7 +211,7 @@ public class MySqlTableSource implements ScanTableSource, SupportsReadingMetadat
         this.metadataKeys = Collections.emptyList();
         this.heartbeatInterval = heartbeatInterval;
         this.migrateAll = migrateAll;
-        this.inlongStreamIdAndNodeId = inlongStreamIdAndNodeId;
+        this.inlongGroupStreamNodeId = inlongGroupStreamIdAndNodeId;
     }
 
     @Override
@@ -270,7 +270,7 @@ public class MySqlTableSource implements ScanTableSource, SupportsReadingMetadat
                             .scanNewlyAddedTableEnabled(scanNewlyAddedTableEnabled)
                             .jdbcProperties(jdbcProperties)
                             .heartbeatInterval(heartbeatInterval)
-                            .inlongStreamIdAndNodeId(inlongStreamIdAndNodeId)
+                            .inlongGroupStreamNodeId(inlongGroupStreamNodeId)
                             .build();
             return SourceProvider.of(parallelSource);
         } else {
@@ -357,7 +357,7 @@ public class MySqlTableSource implements ScanTableSource, SupportsReadingMetadat
                         jdbcProperties,
                         heartbeatInterval,
                         migrateAll,
-                        inlongStreamIdAndNodeId);
+                        inlongGroupStreamNodeId);
         source.metadataKeys = metadataKeys;
         source.producedDataType = producedDataType;
         return source;
@@ -396,7 +396,7 @@ public class MySqlTableSource implements ScanTableSource, SupportsReadingMetadat
                 && Objects.equals(producedDataType, that.producedDataType)
                 && Objects.equals(metadataKeys, that.metadataKeys)
                 && Objects.equals(jdbcProperties, that.jdbcProperties)
-                && Objects.equals(inlongStreamIdAndNodeId, that.inlongStreamIdAndNodeId);
+                && Objects.equals(inlongGroupStreamNodeId, that.inlongGroupStreamNodeId);
     }
 
     @Override
@@ -426,7 +426,7 @@ public class MySqlTableSource implements ScanTableSource, SupportsReadingMetadat
                 metadataKeys,
                 scanNewlyAddedTableEnabled,
                 jdbcProperties,
-                inlongStreamIdAndNodeId);
+                inlongGroupStreamNodeId);
     }
 
     @Override

@@ -55,6 +55,10 @@ public class MySqlSourceReaderMetrics {
     private Counter numBytesIn;
     private Meter numRecordsInPerSecond;
     private Meter numBytesInPerSecond;
+    private static Integer TIME_SPAN_IN_SECONDS = 60;
+    private static String STREAM_ID = "streamId";
+    private static String GROUP_ID = "groupId";
+    private static String NODE_ID = "nodeId";
 
     public MySqlSourceReaderMetrics(MetricGroup metricGroup) {
         this.metricGroup = metricGroup;
@@ -66,22 +70,30 @@ public class MySqlSourceReaderMetrics {
         metricGroup.gauge("sourceIdleTime", (Gauge<Long>) this::getIdleTime);
     }
 
-    public void registerMetricsForNumRecordsIn(String streamId, String nodeId, String metricName) {
-        numRecordsIn = metricGroup.addGroup("streamId", streamId).addGroup("nodeId", nodeId).counter(metricName);
+    public void registerMetricsForNumRecordsIn(String groupId, String streamId, String nodeId, String metricName) {
+        numRecordsIn =
+                metricGroup.addGroup(GROUP_ID, groupId).addGroup(STREAM_ID, streamId).addGroup(NODE_ID, nodeId)
+                        .counter(metricName);
     }
 
-    public void registerMetricsForNumBytesIn(String streamId, String nodeId, String metricName) {
-        numBytesIn = metricGroup.addGroup("streamId", streamId).addGroup("nodeId", nodeId).counter(metricName);
+    public void registerMetricsForNumBytesIn(String groupId, String streamId, String nodeId, String metricName) {
+        numBytesIn =
+                metricGroup.addGroup(GROUP_ID, groupId).addGroup(STREAM_ID, streamId).addGroup(NODE_ID, nodeId)
+                        .counter(metricName);
     }
 
-    public void registerMetricsForNumRecordsInPerSecond(String streamId, String nodeId, String metricName) {
-        numRecordsInPerSecond = metricGroup.addGroup("streamId", streamId).addGroup("nodeId", nodeId)
-                .meter(metricName, new MeterView(this.numRecordsIn, 60));
+    public void registerMetricsForNumRecordsInPerSecond(String groupId, String streamId, String nodeId,
+            String metricName) {
+        numRecordsInPerSecond = metricGroup.addGroup(GROUP_ID, groupId).addGroup(STREAM_ID, streamId).addGroup(NODE_ID,
+                        nodeId)
+                .meter(metricName, new MeterView(this.numRecordsIn, TIME_SPAN_IN_SECONDS));
     }
 
-    public void registerMetricsForNumBytesInPerSecond(String streamId, String nodeId, String metricName) {
-        numBytesInPerSecond = metricGroup.addGroup("streamId", streamId).addGroup("nodeId", nodeId)
-                .meter(metricName, new MeterView(this.numBytesIn, 60));
+    public void registerMetricsForNumBytesInPerSecond(String groupId, String streamId, String nodeId,
+            String metricName) {
+        numBytesInPerSecond = metricGroup.addGroup(GROUP_ID, groupId).addGroup(STREAM_ID, streamId)
+                .addGroup(NODE_ID, nodeId)
+                .meter(metricName, new MeterView(this.numBytesIn, TIME_SPAN_IN_SECONDS));
     }
 
     public long getFetchDelay() {

@@ -20,6 +20,7 @@ package org.apache.inlong.sort.cdc.mysql.source;
 
 import io.debezium.jdbc.JdbcConnection;
 import io.debezium.relational.TableId;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.annotation.PublicEvolving;
 import org.apache.flink.api.common.typeinfo.TypeInformation;
@@ -142,12 +143,18 @@ public class MySqlSource<T>
         // create source config for the given subtask (e.g. unique server id)
         MySqlSourceConfig sourceConfig =
                 configFactory.createConfig(readerContext.getIndexOfSubtask());
-        String streamId = sourceConfig.getInlongStreamIdAndNodeId().split("_")[0];
-        String nodeId = sourceConfig.getInlongStreamIdAndNodeId().split("_")[1];
-        sourceReaderMetrics.registerMetricsForNumBytesIn(streamId, nodeId, "numBytesIn");
-        sourceReaderMetrics.registerMetricsForNumRecordsIn(streamId, nodeId, "numRecordsIn");
-        sourceReaderMetrics.registerMetricsForNumBytesInPerSecond(streamId, nodeId, "numBytesInPerSecond");
-        sourceReaderMetrics.registerMetricsForNumRecordsInPerSecond(streamId, nodeId, "numRecordsInPerSecond");
+        String inlongGroupStreamNodeId = sourceConfig.getInlongGroupStreamNodeId();
+        if (StringUtils.isNotEmpty(inlongGroupStreamNodeId)) {
+            String[] inlongGroupStreamNodeIdArray = inlongGroupStreamNodeId.split("_");
+            String groupId = inlongGroupStreamNodeIdArray[0];
+            String streamId = inlongGroupStreamNodeIdArray[1];
+            String nodeId = inlongGroupStreamNodeIdArray[2];
+            sourceReaderMetrics.registerMetricsForNumBytesIn(groupId, streamId, nodeId, "numBytesIn");
+            sourceReaderMetrics.registerMetricsForNumRecordsIn(groupId, streamId, nodeId, "numRecordsIn");
+            sourceReaderMetrics.registerMetricsForNumBytesInPerSecond(groupId, streamId, nodeId, "numBytesInPerSecond");
+            sourceReaderMetrics.registerMetricsForNumRecordsInPerSecond(groupId, streamId, nodeId,
+                    "numRecordsInPerSecond");
+        }
         FutureCompletingBlockingQueue<RecordsWithSplitIds<SourceRecord>> elementsQueue =
                 new FutureCompletingBlockingQueue<>();
         Supplier<MySqlSplitReader> splitReaderSupplier =

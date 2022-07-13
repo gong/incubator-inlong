@@ -252,8 +252,8 @@ public class MySqlSourceBuilder<T> {
         return this;
     }
 
-    public MySqlSourceBuilder<T> inlongStreamIdAndNodeId(String inlongStreamIdAndNodeId) {
-        this.configFactory.inlongStreamIdAndNodeId(inlongStreamIdAndNodeId);
+    public MySqlSourceBuilder<T> inlongGroupStreamNodeId(String inlongGroupStreamNodeId) {
+        this.configFactory.inlongGroupStreamNodeId(inlongGroupStreamNodeId);
         return this;
     }
 
